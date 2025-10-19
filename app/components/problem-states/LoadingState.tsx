@@ -10,7 +10,7 @@ export function LoadingState() {
         />
       </div>
       <p className="text-xl font-bold text-gray-700">
-        Creating your problem... 🎨
+        Generating a fun math challenge for you...🎨
       </p>
     </div>
   );
