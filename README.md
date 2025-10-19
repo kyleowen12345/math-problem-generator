@@ -143,9 +143,41 @@ _Please fill in this section with any important notes about your implementation,
 
 ### My Implementation:
 
--
--
--
+- Sound Effects System: Integrated Web Audio API to generate dynamic sound effects for correct answers (ascending musical tones), incorrect answers (descending buzz), and streak milestones (power-up sequence). No database storage needed—all sounds are generated on-the-fly using the browser's native audio context, making it lightweight and instant.
+
+- Sound Toggle Control: Added a user-friendly sound toggle button in the top-right corner that persists state during the session, allowing kids (and parents) to mute audio if needed. The button displays clear visual feedback with icons and text, maintaining the fun aesthetic while respecting user preferences.
+
+- Gamification Enhancement: Sound effects work in tandem with existing visual feedback (confetti, color changes, animations, streak messages) to create multi-sensory positive reinforcement when kids get answers correct, dramatically increasing engagement and making the experience more rewarding.
+
+Design Decisions:
+
+- No External Audio Files: Chose to generate sounds programmatically rather than loading audio files to keep the app lightweight, reduce loading times, and eliminate dependency on external assets that might fail to load.
+
+- Preserved Original Design: Maintained all existing UI components, colors, and animations to preserve the cohesive, vibrant design kids love. The sound feature integrates seamlessly as an enhancement rather than a redesign.
+
+- Kid-Friendly Audio: Selected frequencies and durations specifically chosen to be pleasant and encouraging rather than harsh or overwhelming—perfect for young learners who need positive reinforcement.
+
+- Session-Based Architecture: Used session IDs to track problem-submission pairs, allowing for accurate feedback generation and maintaining context throughout the solving process.
+
+Challenges Faced:
+
+- Web Audio API Browser Support: Some older browsers or specific contexts don't support Web Audio API, so wrapped all audio code in try-catch blocks to gracefully degrade on unsupported platforms.
+
+- Audio Context Permissions: Modern browsers require user interaction to enable audio context, but implementation automatically initializes on first answer submission, which triggers the audio permission seamlessly.
+
+- Balancing Engagement: Ensured sound effects don't become annoying or distracting with careful timing (short, punchy sounds) and the ability to toggle them off completely.
+
+- AI Response Format Consistency: Managing variable JSON responses from Gemini required robust parsing and validation to ensure the problem structure matches database schema.
+
+Features I'm Proud Of:
+
+- Streak Milestone Celebration: When kids hit 5-problem streaks ("ON FIRE!"), the system automatically plays a special power-up sound, creating a magical moment of achievement without requiring code changes.
+
+- Accessibility First: The sound toggle is easily accessible and clearly labeled, ensuring kids with sensory sensitivities or those in quiet environments can still enjoy the full game experience.
+
+- Zero Latency Audio: Unlike loading audio files, programmatically generated sounds play instantly with zero network delay, creating immediate feedback that makes the experience feel snappier and more responsive.
+
+- Multi-Sensory Learning: Combined visual (confetti, animations, colors) and audio feedback to create a rich, engaging learning environment that caters to different learning styles.
 
 ## Additional Features (Optional)
 
