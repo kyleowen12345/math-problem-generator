@@ -143,41 +143,156 @@ _Please fill in this section with any important notes about your implementation,
 
 ### My Implementation:
 
-- Sound Effects System: Integrated Web Audio API to generate dynamic sound effects for correct answers (ascending musical tones), incorrect answers (descending buzz), and streak milestones (power-up sequence). No database storage needed—all sounds are generated on-the-fly using the browser's native audio context, making it lightweight and instant.
+1. Professional Component Architecture
+   Implemented a clean, scalable component structure following industry best practices:
 
-- Sound Toggle Control: Added a user-friendly sound toggle button in the top-right corner that persists state during the session, allowing kids (and parents) to mute audio if needed. The button displays clear visual feedback with icons and text, maintaining the fun aesthetic while respecting user preferences.
+Modular Design: 17+ separate component files organized in logical folders (components/, components/problem-states/, lib/, types/)
+Barrel Exports: Created index files for each module, enabling clean imports (import { Header, ScoreBoard } from "@/app/components")
+Single Responsibility: Each component has one clear purpose, making the codebase testable and maintainable
+TypeScript Excellence: Full type safety with custom interfaces, no any types, proper type exports
 
-- Gamification Enhancement: Sound effects work in tandem with existing visual feedback (confetti, color changes, animations, streak messages) to create multi-sensory positive reinforcement when kids get answers correct, dramatically increasing engagement and making the experience more rewarding.
+File Structure:
+
+app/
+├── components/
+│ ├── problem-states/ # State-specific components
+│ ├── index.ts # Barrel export
+│ └── [17 components] # Modular UI components
+├── types/
+│ ├── math.ts # Core type definitions
+│ └── index.ts
+└── page.tsx # Main container
+lib/
+├── audio.ts # Audio utilities
+├── streak.ts # Game logic
+└── constants.ts
+
+2. Sound Effects System
+   Integrated Web Audio API to generate dynamic sound effects for enhanced engagement:
+
+Correct Answers: Ascending musical tones (C-E-G chord progression)
+Incorrect Answers: Descending buzz for gentle feedback
+Streak Milestones: Power-up sequence when hitting 5-problem streaks
+Zero Latency: Sounds generated on-the-fly using browser's native audio context—no external files or loading delays
+Graceful Degradation: Try-catch blocks ensure the app works smoothly even when audio isn't supported
+
+Implementation: lib/audio.ts - Reusable utility function with typed sound effects 3. Difficulty Level System
+Three-tier difficulty system with AI-powered problem generation:
+
+Easy (Grades 1-2): Addition/subtraction, 1 operation, answers 5-50
+Medium (Grades 3-4): Add/subtract/multiply, 1-2 operations, answers 20-150
+Hard (Grades 5-6): All four operations, 2-3 operations, answers 50-500
+Smart UI: Dropdown selector with color-coded options (green/yellow/red)
+Auto-Generation: Changing difficulty immediately generates a new problem at that level
+Visual Feedback: Emoji indicators and responsive design for mobile and desktop
+
+Component: app/components/DifficultyDropdown.tsx with full accessibility support 4. Gamification Features
+Comprehensive scoring and streak system to motivate young learners:
+
+Points System: 10 points per correct answer
+Streak Tracking: Consecutive correct answers with visual messages
+
+2+ streak: "⚡ Keep Going!"
+3+ streak: "🌟 Amazing Streak!"
+5+ streak: "🔥 ON FIRE!" (with special sound effect)
+
+Visual Celebrations: Confetti animation on correct answers
+Error Feedback: Shake animation for incorrect answers
+Score Dashboard: Trophy, target, and star icons showing points, streak, and total solved
+
+5. User Experience Enhancements
+
+Sound Toggle: User-friendly button to mute/unmute audio (top-right corner)
+Keyboard Support: Press Enter to submit answers for faster interaction
+Loading States: Smooth animations during API calls
+Error Handling: Graceful error messages with retry options
+Mobile Responsive: Fully optimized for all screen sizes
+Accessibility: ARIA labels, semantic HTML, keyboard navigation
+
+6. Session-Based Architecture
+
+Session Tracking: Each problem gets a unique session ID for accurate feedback
+Database Integration: Problems and submissions saved to Supabase
+Context Preservation: Session IDs maintain problem-submission relationships
+AI Feedback: Personalized responses based on user's specific answer
 
 Design Decisions:
+Component Architecture
 
-- No External Audio Files: Chose to generate sounds programmatically rather than loading audio files to keep the app lightweight, reduce loading times, and eliminate dependency on external assets that might fail to load.
+Why Modular? Easier to test, maintain, and scale. Each component can be modified without affecting others.
+Why Barrel Exports? Cleaner imports, better developer experience, easier refactoring.
+Why TypeScript? Type safety prevents bugs, improves autocomplete, and serves as living documentation.
 
-- Preserved Original Design: Maintained all existing UI components, colors, and animations to preserve the cohesive, vibrant design kids love. The sound feature integrates seamlessly as an enhancement rather than a redesign.
+Sound System
 
-- Kid-Friendly Audio: Selected frequencies and durations specifically chosen to be pleasant and encouraging rather than harsh or overwhelming—perfect for young learners who need positive reinforcement.
+No External Files: Programmatic generation keeps the app lightweight and eliminates loading delays
+Web Audio API: Native browser support ensures compatibility and instant playback
+Pleasant Frequencies: Carefully chosen tones that encourage rather than annoy
 
-- Session-Based Architecture: Used session IDs to track problem-submission pairs, allowing for accurate feedback generation and maintaining context throughout the solving process.
+Difficulty Levels
+
+Grade-Appropriate: Aligned with actual elementary school curriculum standards
+Progressive Challenge: Smooth difficulty curve from simple to complex operations
+Immediate Feedback: New problems generate instantly when difficulty changes
+
+Gamification
+
+Multi-Sensory: Visual (confetti, colors), audio (sounds), and textual (messages) feedback
+Positive Reinforcement: Celebrates success while being encouraging on mistakes
+Clear Progress: Dashboard shows tangible metrics kids can track
 
 Challenges Faced:
 
-- Web Audio API Browser Support: Some older browsers or specific contexts don't support Web Audio API, so wrapped all audio code in try-catch blocks to gracefully degrade on unsupported platforms.
+1. Web Audio API Browser Support
 
-- Audio Context Permissions: Modern browsers require user interaction to enable audio context, but implementation automatically initializes on first answer submission, which triggers the audio permission seamlessly.
+Problem: Some browsers/contexts don't support Web Audio API
+Solution: Wrapped all audio code in try-catch blocks for graceful degradation
 
-- Balancing Engagement: Ensured sound effects don't become annoying or distracting with careful timing (short, punchy sounds) and the ability to toggle them off completely.
+2. Audio Context Permissions
 
-- AI Response Format Consistency: Managing variable JSON responses from Gemini required robust parsing and validation to ensure the problem structure matches database schema.
+Problem: Modern browsers require user interaction to enable audio
+Solution: Audio initializes on first answer submission, triggering permission seamlessly
+
+3. Component Organization
+
+Problem: Original monolithic file was difficult to navigate and maintain
+Solution: Split into 17+ focused components with clear responsibilities
+
+4. AI Response Consistency
+
+Problem: Gemini responses can vary in format
+Solution: Robust parsing with regex matching and validation for problem/answer extraction
+
+5. Mobile Responsiveness
+
+Problem: Difficulty selector was too wide on mobile
+Solution: Responsive design with w-full on mobile, sm:w-auto on desktop
 
 Features I'm Proud Of:
+🎯 Zero-Configuration Component Imports
+typescript// Clean, professional imports
+import { Header, ScoreBoard, StartState } from "@/app/components";
+No more hunting through folders—everything organized and exported cleanly.
+🎵 Instant Audio Feedback
+Unlike loading audio files, programmatically generated sounds play instantly with zero network delay, creating immediate feedback that makes the experience feel snappier.
+🏗️ Scalable Architecture
+The component structure is production-ready. Adding new features (hints, history, leaderboards) is straightforward without refactoring.
+♿ Accessibility First
 
-- Streak Milestone Celebration: When kids hit 5-problem streaks ("ON FIRE!"), the system automatically plays a special power-up sound, creating a magical moment of achievement without requiring code changes.
+ARIA labels on all interactive elements
+Keyboard navigation (Enter to submit)
+Sound toggle for sensory sensitivities
+Semantic HTML structure
 
-- Accessibility First: The sound toggle is easily accessible and clearly labeled, ensuring kids with sensory sensitivities or those in quiet environments can still enjoy the full game experience.
+📱 Mobile-First Design
+Every component tested and optimized for mobile. Touch-friendly buttons, responsive text sizes, proper spacing.
+🎮 Streak Milestone Magic
+When kids hit 5-problem streaks, the system automatically plays a special power-up sound and displays "🔥 ON FIRE!" message—creating a magical achievement moment.
+🎨 Color Psychology
 
-- Zero Latency Audio: Unlike loading audio files, programmatically generated sounds play instantly with zero network delay, creating immediate feedback that makes the experience feel snappier and more responsive.
-
-- Multi-Sensory Learning: Combined visual (confetti, animations, colors) and audio feedback to create a rich, engaging learning environment that caters to different learning styles.
+Green (Easy): Calming, encouraging for beginners
+Yellow (Medium): Energetic, signals challenge
+Red (Hard): Exciting, achievement-oriented for advanced learners
 
 ## Additional Features (Optional)
 

@@ -48,6 +48,6 @@ export const playSoundEffect = (type: SoundType) => {
       });
     }
   } catch (e) {
-    console.log("Audio context not available");
+    console.error("Audio context not available");
   }
 };

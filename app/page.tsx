@@ -7,6 +7,7 @@ import {
   BackgroundDecorations,
   ConfettiEffect,
   SoundToggle,
+  DifficultyDropdown,
   Header,
   ScoreBoard,
   StreakMessage,
@@ -20,7 +21,7 @@ import {
 } from "@/app/components";
 
 // Types & Utils
-import type { MathProblem, SubmissionResult } from "@/types";
+import type { MathProblem, SubmissionResult, Difficulty } from "@/types";
 import { playSoundEffect, getStreakMessage, STREAK_THRESHOLDS } from "@/lib";
 
 export default function MathAdventure() {
@@ -35,6 +36,7 @@ export default function MathAdventure() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [shake, setShake] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [difficulty, setDifficulty] = useState<Difficulty>("easy");
 
   useEffect(() => {
     if (!showConfetti) return;
@@ -58,6 +60,7 @@ export default function MathAdventure() {
       const response = await fetch("/api/math-problem", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ difficulty }),
       });
 
       if (!response.ok) throw new Error("Failed to generate problem");
@@ -143,6 +146,11 @@ export default function MathAdventure() {
         </div>
 
         <Header />
+        <DifficultyDropdown
+          selected={difficulty}
+          onChange={setDifficulty}
+          disabled={loading || submitting}
+        />
         <ScoreBoard score={score} streak={streak} solvedCount={solvedCount} />
         <StreakMessage message={streakMessage} />
 

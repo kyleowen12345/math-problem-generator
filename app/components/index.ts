@@ -3,6 +3,7 @@ export { BackgroundDecorations } from "./BackgroundDecorations";
 export { ConfettiEffect } from "./ConfettiEffect";
 export { SoundToggle } from "./SoundToggle";
 export { Header } from "./Header";
+export { DifficultyDropdown } from "./DifficultyDropdown";
 export { ScoreBoard } from "./ScoreBoard";
 export { StreakMessage } from "./StreakMessage";
 export { TipsCard } from "./TipsCard";

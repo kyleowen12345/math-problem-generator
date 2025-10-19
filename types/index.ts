@@ -1,1 +1,1 @@
-export type { MathProblem, SubmissionResult } from "./math";
+export type { MathProblem, SubmissionResult, Difficulty } from "./math";
