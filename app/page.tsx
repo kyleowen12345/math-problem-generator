@@ -24,7 +24,7 @@ import {
 import type { MathProblem, SubmissionResult, Difficulty } from "@/types";
 import { playSoundEffect, getStreakMessage, STREAK_THRESHOLDS } from "@/lib";
 
-export default function MathAdventure() {
+export default function Home() {
   const [problem, setProblem] = useState<MathProblem | null>(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [result, setResult] = useState<SubmissionResult | null>(null);
@@ -96,7 +96,15 @@ export default function MathAdventure() {
       setResult(data);
 
       if (data.is_correct) {
-        setScore((prev) => prev + 10);
+        // Calculate points based on difficulty
+        const pointsByDifficulty = {
+          easy: 2,
+          medium: 5,
+          hard: 10,
+        };
+        const points = pointsByDifficulty[difficulty];
+
+        setScore((prev) => prev + points);
         const newStreak = streak + 1;
         setStreak(newStreak);
         setShowConfetti(true);
